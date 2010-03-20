@@ -23,6 +23,8 @@ class Server(models.Model):
 
             service.process(service_elem)                
 
+    def __unicode__(self):
+        return self.localhostname
         
 class Platform(models.Model):
     server = models.ForeignKey('Server')
@@ -54,6 +56,9 @@ class Service(models.Model):
 
         self.save()
 
+    def __unicode__(self):
+        return self.name
+            
 class Event(models.Model):
     server = models.ForeignKey('Server')
     service = models.TextField()
