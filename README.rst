@@ -7,7 +7,7 @@ django-monit - A Simple Monit Collector
     django-monit is currently very preliminary and is best for people who
     are comfortable installing reusable apps in Django projects.
 
-django-monit is a very dumb (but free) replacement for `M/Monit`, the commerical 
+django-monit is a very dumb (but free) replacement for `M/Monit`_, the commerical 
 product built around the amazing Monit_ management and monitoring tool.
 
 django-monit is a reusable Django_ application providing a central Monit 
