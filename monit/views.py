@@ -1,8 +1,10 @@
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
+from django.views.decorators.csrf import csrf_exempt
 from monit.models import collect
 import logging
 
 #FIXME add auth & perms
+@csrf_exempt
 def collector(request):
     #TODO need to dig more into the monit collector protocol
 
