@@ -2,11 +2,15 @@ from django.db import models
 from lxml import etree
 
 class Server(models.Model):
-    monitid = models.CharField(max_length=32, db_index=True)
-    localhostname = models.TextField()
+    monitid = models.CharField(max_length=32, unique=True)
+    localhostname = models.TextField(unique=True) # possibly unique?
     uptime = models.PositiveIntegerField()
     version = models.TextField()
-   
+
+    @property
+    def name(self):
+        return self.localhostname
+    
     def process(self, xml):
         self.uptime = find(xml, 'server/uptime')
         self.version = find(xml, 'server/version')
@@ -23,8 +27,12 @@ class Server(models.Model):
 
             service.process(service_elem)                
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('server_detail', [self.name]) 
+
     def __unicode__(self):
-        return self.localhostname
+        return self.name
         
 class Platform(models.Model):
     server = models.ForeignKey('Server')
@@ -44,7 +52,7 @@ SERVICE_TYPE_CHOICES = ((3, 'Process'),
 
 class Service(models.Model):
     server = models.ForeignKey('Server')
-    name = models.TextField()
+    name = models.TextField(db_index=True)
     status = models.PositiveIntegerField(choices=STATUS_CHOICES)
     uptime = models.PositiveIntegerField(null=True, blank=True)
     service_type = models.PositiveIntegerField(choices=SERVICE_TYPE_CHOICES)
@@ -56,9 +64,16 @@ class Service(models.Model):
 
         self.save()
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('service_detail', [self.server.name, self.name]) 
+
     def __unicode__(self):
         return self.name
-            
+
+    class Meta:
+        unique_together = (('server', 'name'),)
+
 class Event(models.Model):
     server = models.ForeignKey('Server')
     service = models.TextField()

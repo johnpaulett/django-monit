@@ -1,7 +1,15 @@
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
+from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
+from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
-from monit.models import collect
+from monit.models import collect, Server, Service
+
 import logging
+
+def render_response(request, template, context):
+    """Wrapper around render_to_response that adds the RequestContext."""
+    return render_to_response(template, context,
+                              context_instance=RequestContext(request))
 
 #FIXME add auth & perms
 @csrf_exempt
@@ -17,6 +25,26 @@ def collector(request):
     if data is None or len(data) == 0:
         return HttpResponseBadRequest('need some data')
 
-    logging.info('monit collecter processing data from %s' % request.META['REMOTE_ADDR'])
+    logging.info('monit collecter processing data from %s' %
+                 request.META['REMOTE_ADDR'])
     collect(data)
     return HttpResponse('ok')
+
+def server_list(request, template_name='monit/server_list.html'):
+    servers = get_list_or_404(Server)
+    return render_response(request, template_name,
+                           {'servers': servers})
+
+def server_detail(request, server_name, template_name='monit/server_detail.html'):
+    server = get_object_or_404(Server, localhostname=server_name)
+    services = server.service_set.all()
+    return render_response(request, template_name,
+                           {'server': server, 'services': services})
+
+def service_detail(request, server_name, service_name,
+                   template_name='monit/service_detail.html'):
+    server = get_object_or_404(Server, localhostname=server_name)
+    service = get_object_or_404(server.service_set.all(), name=service_name)
+    return render_response(request, template_name,
+                           {'server': server, 'service': service})
+    

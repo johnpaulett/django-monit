@@ -1,0 +1,10 @@
+<h1>{{ server.localhostname }}</h1>
+
+<ul>
+    {% for service in services %}
+        <li>
+	    <a href="{{ service.get_absolute_url }}">{{ service.name }}</a>
+	</li>
+
+    {% endfor %}
+</ul>

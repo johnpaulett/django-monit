@@ -1,0 +1,8 @@
+<ul>
+    {% for server in servers %}
+        <li>
+	    <a href="{{ server.get_absolute_url }}">{{ server.localhostname }}</a>
+	</li>
+
+    {% endfor %}
+</ul>
