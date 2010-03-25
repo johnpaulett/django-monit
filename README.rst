@@ -12,8 +12,8 @@ product built around the amazing Monit_ management and monitoring tool.
 
 django-monit is a reusable Django_ application providing a central Monit 
 "collector" and storage of the Monit nodes' information and events.  Currently,
-django-monit is can be installed as an app within an existing Django site.
-In the future, a tool could built a simple Django project if someone wished
+django-monit can be installed as an app within an existing Django site.
+In the future, a tool could build a simple Django project if someone wished
 to only deploy django-monit.
 
 At this point, django-monit only acts as a collector of information from any 
@@ -21,9 +21,9 @@ number of Monit nodes, and can not push restart commands to the nodes as M/Monit
 can do.
 
 My goal currently is to create a tool for making Monit data easily accessible
-from a Django project, rather than 
+from a Django project, rather than acting as a replacement for M/Monit. 
 
-django-monit has been tested on the Django 1.2 RC using Monit 5.0.3 provided
+django-monit has been tested on the Django 1.2 trunk using Monit 5.0.3 provided
 as a Ubuntu 9.10 package.
 
 .. _Monit: http://mmonit.com/monit/
