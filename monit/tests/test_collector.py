@@ -10,7 +10,14 @@ class CollectTest(TestCase):
         self.assertEqual('blueberry', server.localhostname)
         self.assertEqual('5.0.3', server.version)
         self.assertEqual(0, server.uptime)
-        self.assertEqual(0, server.service_set.count())
+        self.assertEqual(0, server.process_set.count())
+        #self.assertTrue(server.system is None)
+
+        self.assertEqual(1, server.event_set.count())
+        event = server.event_set.get()
+        self.assertEqual(event.state, 2)
+        self.assertEqual(event.action, 6)
+        
         
     def test_initial_update(self):
         collect(STARTUP_MESSAGE)
@@ -19,22 +26,18 @@ class CollectTest(TestCase):
         server = Server.objects.get()
         self.assertEqual('4d545e009c94b0697f3a17ee62a9b311', server.monitid)      
         self.assertEqual(1080, server.uptime)
-        self.assertEqual(5, server.service_set.count())
+        self.assertEqual(4, server.process_set.count())
 
-        ssh = server.service_set.get(name='sshd')
+        ssh = server.process_set.get(name='sshd')
         self.assertEqual(363503, ssh.uptime)
         self.assertEqual(0, ssh.status)
-        self.assertEqual(3, ssh.service_type)
 
-        tomcat = server.service_set.get(name='tomcat')
+        tomcat = server.process_set.get(name='tomcat')
         self.assertTrue(tomcat.uptime is None)
         self.assertEqual(512, tomcat.status)
-        self.assertEqual(3, tomcat.service_type)
 
-        comp = server.service_set.get(name='blueberry')
-        self.assertTrue(comp.uptime is None)
-        self.assertEqual(0, comp.status)
-        self.assertEqual(5, comp.service_type)
+        system = server.system
+        self.assertEqual(0, system.status)
         
 class CollectorViewTest(TestCase):
     def test_simple_post(self):
