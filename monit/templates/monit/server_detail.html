@@ -1,9 +1,9 @@
 <h1>{{ server.localhostname }}</h1>
 
 <ul>
-    {% for service in services %}
+    {% for process in processes %}
         <li>
-	    <a href="{{ service.get_absolute_url }}">{{ service.name }}</a>
+	    <a href="{{ process.get_absolute_url }}">{{ process.name }}</a>
 	</li>
 
     {% endfor %}

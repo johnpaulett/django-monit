@@ -35,16 +35,17 @@ def server_list(request, template_name='monit/server_list.html'):
     return render_response(request, template_name,
                            {'servers': servers})
 
-def server_detail(request, server_name, template_name='monit/server_detail.html'):
+def server_detail(request, server_name,
+                  template_name='monit/server_detail.html'):
     server = get_object_or_404(Server, localhostname=server_name)
-    services = server.service_set.all()
+    processes = server.process_set.all()
     return render_response(request, template_name,
-                           {'server': server, 'services': services})
+                           {'server': server, 'processes': processes})
 
-def service_detail(request, server_name, service_name,
-                   template_name='monit/service_detail.html'):
+def process_detail(request, server_name, process_name,
+                   template_name='monit/process_detail.html'):
     server = get_object_or_404(Server, localhostname=server_name)
-    service = get_object_or_404(server.service_set.all(), name=service_name)
+    process = get_object_or_404(server.process_set.all(), name=process_name)
     return render_response(request, template_name,
-                           {'server': server, 'service': service})
+                           {'server': server, 'process': process})
     
