@@ -38,9 +38,16 @@ The easiest way to install django-monit is via pip::
 
     pip install django-monit
 
-However, if you have the source, you can build it yourself::
+Add `'monit'` to the INSTALLED_APPS in your settings.py
 
-    python setup.py install
+Add `url(r'^monit/', include('monit.urls'))` in your urls.py::
+
+    urlpatterns = patterns('',
+        url(r'^app/', include('yourapp.urls')),
+        url(r'^monit/', include('monit.urls')),
+        (r'^admin/', include(admin.site.urls)),
+    )
+
 
 Configure Monit
 ---------------
@@ -53,6 +60,19 @@ In the `monitrc`, you should configure your django-monit instance as a collector
 Dependencies
 -------------
 
- - Django
+ - Django (tested on pre-1.2 trunk)
  - lxml
+
+Testing
+-------
+
+If you have `checked out <http://github.com/johnpaulett/django-monit>`_ the 
+source, you can run the test suite, which uses a simple Django project
+in the test_project folder::
+
+    cd test_project
+    # create a virtualenv and install the dependencies
+    create_env.sh
+    # run the tests
+    ./manage.py test monit
 
