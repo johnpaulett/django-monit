@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 from monit.models import *
 
@@ -48,6 +49,14 @@ class CollectorViewTest(TestCase):
 
         server = Server.objects.get()
         self.assertEqual('4d545e009c94b0697f3a17ee62a9b311', server.monitid)      
+
+class PermissionsTest(TestCase):
+    def setUp(self):
+        settings.MONIT_AUTHENTICATION = True
+
+    def tearDown(self):
+        # assumes that the default config is false
+        settings.MONIT_AUTHENTICATION = False
 
 STARTUP_MESSAGE = """<?xml version="1.0" encoding="ISO-8859-1"?>   
 <monit>

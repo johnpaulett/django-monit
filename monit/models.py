@@ -3,7 +3,6 @@ from lxml import etree
 
 import logging
 
-
 def find(xml, path=None, attr=None):
     if path is None:
         elem = xml
@@ -38,6 +37,11 @@ class Server(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        permissions = (
+            ('can_post_data', 'Can post status data'),
+        )
    
     @classmethod
     def parse(cls, xml):

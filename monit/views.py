@@ -1,18 +1,13 @@
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
-from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from monit.models import collect, Server, Service
+from monit.utils import get_config, render_response
 
 import logging
 
-def render_response(request, template, context):
-    """Wrapper around render_to_response that adds the RequestContext."""
-    return render_to_response(template, context,
-                              context_instance=RequestContext(request))
-
-#FIXME add auth & perms
 @csrf_exempt
+@user_passes_test(lambda user: get_config('MONIT_AUTHENTICATE', False) && user.has_perm('server.can_post_data'))
 def collector(request):
     #TODO need to dig more into the monit collector protocol
 

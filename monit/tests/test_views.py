@@ -27,4 +27,3 @@ class ServersViewTest(TestCase):
         response = self.client.get('/monit/servers/raspberry/processes/sshd/')
         self.assertContains(response, 'raspberry')
         self.assertContains(response, 'sshd')
-
