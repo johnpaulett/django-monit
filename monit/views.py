@@ -1,5 +1,6 @@
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed
-from django.shortcuts import get_list_or_404, get_object_or_404, render_to_response
+from django.shortcuts import get_list_or_404, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from monit.models import collect, Server, Service
 from monit.utils import get_config, render_response
@@ -7,7 +8,7 @@ from monit.utils import get_config, render_response
 import logging
 
 @csrf_exempt
-@user_passes_test(lambda user: get_config('MONIT_AUTHENTICATE', False) && user.has_perm('server.can_post_data'))
+@user_passes_test(lambda user: get_config('MONIT_AUTHENTICATE', False) and user.has_perm('server.can_post_data'))
 def collector(request):
     #TODO need to dig more into the monit collector protocol
 
